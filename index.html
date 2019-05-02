@@ -127,10 +127,22 @@
      function publishMessage() {
        var mess = document.getElementById("message").value;
        var direction = document.getElementById("heading").value;
+       alert(direction);
        addTextbox(mess, 'right', direction);
        pubnubDemo.publish({ message: {"text":mess}, channel: direction});
        document.getElementById("message").innerHTML = '';
      }
+
+     pubnubDemo.addListener({
+       message: function(message){
+         message1 = message.message.text;
+         let direction = message.channel;
+         addTextbox(message1, 'left', direction)
+       }
+     })
+     pubnubDemo.subscribe({
+       channels: ["North", "East", "South", "West"]
+     });
 
      function addTextbox(message, messageType, direction){
        if (message != ''){
@@ -166,17 +178,6 @@
        }
 
      }
-
-     pubnubDemo.addListener({
-       message: function(message){
-         message1 = message.message.text;
-         let direction = message.channel;
-         addTextbox(message1, 'left', direction)
-       }
-     })
-     pubnubDemo.subscribe({
-       channels: ["North", "East", "South", "West"]
-     });
 
   </script>
 
