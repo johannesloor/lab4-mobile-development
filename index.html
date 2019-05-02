@@ -27,9 +27,9 @@
       .message{
         margin: 3%;
       }
-      .textarea{
+      .messageArea{
         background-color: #0084ff;
-        
+        color: white;
       }
       .messagebox{
         position: fixed;
@@ -153,7 +153,7 @@
        if (message != ''){
          document.getElementById("chatWindow" + direction).innerHTML +=
          `<div class="row message">
-         <div class="col-12 textarea" rows="3">` + message + `</div>
+         <div class="col-12 messageArea" rows="3">` + message + `</div>
          </div>`
 
        }
