@@ -133,7 +133,7 @@
      }
 
      function addTextbox(message, messageType){
-       let direction = receiveDirection();//document.getElementById("heading").innerHTML;
+       let direction = document.getElementById("heading").innerHTML;
        if (message != ''){
          if (messageType == 'right'){
            document.getElementById("chatWindow" + direction).innerHTML +=
@@ -152,7 +152,7 @@
      }
 
      function receiveDirection() {
-       let direction = document.getElementById("heading").innerHTML;
+       let direction = document.getElementById("heading").value;
        if (direction == "West"){
          return "East";
        }
