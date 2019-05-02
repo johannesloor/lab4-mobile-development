@@ -126,7 +126,7 @@
 
      function publishMessage() {
        var mess = document.getElementById("message").value;
-       var direction = document.getElementById("heading").value;
+       var direction = document.getElementById("heading").innerHTML;
        alert(direction);
        addTextbox(mess, 'right', direction);
        pubnubDemo.publish({ message: {"text":mess}, channel: direction});
