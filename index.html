@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <title>Messeging app</title>
+    <link rel="stylesheet" href="https://unpkg.com/onsenui/css/onsenui.css">
+    <link rel="stylesheet" href="https://unpkg.com/onsenui/css/onsen-css-components.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://unpkg.com/onsenui/js/onsenui.min.js"></script>
+    <script src="https://unpkg.com/ionicons@4.5.5/dist/ionicons.js"></script>
+    <script src="https://cdn.pubnub.com/sdk/javascript/pubnub.4.21.7.js"></script>
+    <script type="text/javascript">
+
+    var pubnubDemo = new PubNub({
+      publishKey: 'pub-c-cb821f51-67fb-4553-a85c-cfbbcd375fac',
+      subscribeKey: 'sub-c-37a86f98-6cb1-11e9-bedf-bef46dd4efdc'
+    });
+    </script>
+    <style media="screen">
+      body {
+        font-family: "Lucida Console", monospace, verdana;
+      }
+      .chatWindow{
+        position: relative;
+        bottom: 10vh;
+        top: 5vh;
+      }
+      .messagebox{
+        position: fixed;
+        left: 0;
+        bottom: 1;
+        width: 100%;
+      }
+    </style>
+  </head>
+  <body>
+    <ons-page id="home">
+      <ons-toolbar>
+        <div id="heading" class="center"></div>
+      </ons-toolbar>
+
+      <div class="container chatWindow" id="chatWindowNorth">
+      </div>
+
+      <div class="container chatWindow" id="chatWindowSouth">
+      </div>
+
+      <div class="container chatWindow" id="chatWindowEast">
+      </div>
+
+      <div class="container chatWindow" id="chatWindowWest">
+      </div>
+
+
+      <ons-bottom-toolbar class="messagebox container" aligned>
+        <div class="row">
+          <textarea class="textarea textarea--transparent col-8" rows="2" id="message" placeholder="Message"></textarea>
+          <div class="col-1"></div>
+          <ons-button class="col-3" onclick="publishMessage()">Send</ons-button>
+        </div>
+
+      </ons-bottom-toolbar>
+    </ons-page>
+
+    <script>
+   // Get event data
+
+   if (window.DeviceOrientationEvent) {
+      window.addEventListener("deviceorientation", deviceOrientationListener);
+    }
+  else {
+      document.getElementById("heading").innerHTML = "Sorry, your browser doesn't support Device Orientation";
+   }
+
+   function deviceOrientationListener(event) {
+     var alpha   = event.alpha; //z axis rotation [0,360)
+     var beta     = event.beta; //x axis rotation [-180, 180]
+     var gamma   = event.gamma; //y axis rotation [-90, 90]
+
+
+     //Check if absolute values have been sent
+     if (typeof event.webkitCompassHeading !== "undefined") {
+       alpha = event.webkitCompassHeading; //for iOS devices
+
+       if (alpha >= 305 || alpha < 45) {
+         document.getElementById("heading").innerHTML = "North";
+         showPage('chatWindowNorth')
+       }
+       if (alpha >= 45 && alpha < 135) {
+         document.getElementById("heading").innerHTML = "East";
+         showPage('chatWindowEast')
+       }
+       if (alpha >= 135 && alpha < 225) {
+         document.getElementById("heading").innerHTML = "South";
+         showPage('chatWindowSouth')
+       }
+       if (alpha >= 225 && alpha < 305) {
+         document.getElementById("heading").innerHTML = "West";
+         showPage('chatWindowWest')
+       }
+     }
+
+     else {
+       //alert("Your device is reporting relative alpha values, so this compass won't point north :(");
+       var alpha = 360 - alpha; //heading [0, 360)
+         if (alpha >= 305 || alpha < 45) {
+           document.getElementById("heading").innerHTML = "North";
+           showPage('chatWindowNorth')
+         }
+         if (alpha >= 45 && alpha < 135) {
+           document.getElementById("heading").innerHTML = "East";
+           showPage('chatWindowEast')
+         }
+         if (alpha >= 135 && alpha < 225) {
+           document.getElementById("heading").innerHTML = "South";
+           showPage('chatWindowSouth')
+         }
+         if (alpha >= 225 && alpha < 305) {
+           document.getElementById("heading").innerHTML = "West";
+           showPage('chatWindowWest')
+         }
+        }
+     }
+
+     function publishMessage() {
+       var mess = document.getElementById("message").value;
+       var direction = document.getElementById("heading").value;
+       addTextbox(mess, 'right');
+       pubnubDemo.publish({ message: {"text":mess}, channel: direction});
+       document.getElementById("message").value = '';
+     }
+
+     function addTextbox(message, messageType){
+       let direction = document.getElementById("heading").innerHTML;
+       console.log(direction)
+       if (message != ''){
+         if (messageType == 'right'){
+           document.getElementById("chatWindow" + direction).innerHTML +=
+           `<div class="row right"><div class="col-7"></div>
+           <textarea class="col-5 textarea" rows="3">` + message + `</textarea>
+           </div>`
+         }
+         if (messageType == 'left'){
+           document.getElementById("chatWindow" + direction).innerHTML +=
+           `<div class="row left">
+           <textarea class="col-5 textarea" rows="3">` + message + `</textarea>
+           <div class="col-7"></div>
+           </div>`
+         }
+       }
+     }
+
+     function receiveDirection() {
+       let direction = document.getElementById("heading").innerHTML;
+       if (direction == "West"){
+         return "East";
+       }
+       if (direction == "East") {
+         return "West";
+       }
+       if (direction == "North") {
+         return "South"
+       }
+       if (direction == "South") {
+         return "North"
+       }
+
+     }
+     let direction = document.getElementById("heading").value;
+     pubnubDemo.addListener({
+       message: function(message){
+         message = message.message.text;
+         addTextbox(message, 'left')
+         console.log(message)
+       }
+     })
+     pubnubDemo.subscribe({
+       channels: ["North", "East", "South", "West"]
+     });
+
+  </script>
+
+    <script>
+      function showPage (dividShow) {
+        hideAll();
+        var pagetodisplay = document.getElementById(dividShow);
+        pagetodisplay.style.display = "block";
+      }
+
+      function hideAll() {
+        var pages = document.getElementsByClassName("chatWindow");
+        var i;
+        for (i=0; i<pages.length; i++) {
+          pages[i].style.display = "none";
+        }
+      }
+    </script>
+
+  </body>
+
+
+</html>
