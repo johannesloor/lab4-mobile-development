@@ -13,10 +13,7 @@
     <script src="https://cdn.pubnub.com/sdk/javascript/pubnub.4.21.7.js"></script>
     <script type="text/javascript">
 
-    var pubnubDemo = new PubNub({
-      publishKey: 'pub-c-cb821f51-67fb-4553-a85c-cfbbcd375fac',
-      subscribeKey: 'sub-c-37a86f98-6cb1-11e9-bedf-bef46dd4efdc'
-    });
+
     </script>
     <style media="screen">
       body {
@@ -66,7 +63,10 @@
 
     <script>
    // Get event data
-
+   var pubnubDemo = new PubNub({
+     publishKey: 'pub-c-cb821f51-67fb-4553-a85c-cfbbcd375fac',
+     subscribeKey: 'sub-c-37a86f98-6cb1-11e9-bedf-bef46dd4efdc'
+   });
    if (window.DeviceOrientationEvent) {
       window.addEventListener("deviceorientation", deviceOrientationListener);
     }
