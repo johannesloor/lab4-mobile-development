@@ -127,13 +127,13 @@
      function publishMessage() {
        var mess = document.getElementById("message").value;
        var direction = document.getElementById("heading").value;
-       addTextbox(mess, 'right');
+       addTextbox(mess, 'right', direction);
+       alert(direction);
        pubnubDemo.publish({ message: {"text":mess}, channel: direction});
        document.getElementById("message").value = '';
      }
 
-     function addTextbox(message, messageType){
-       let direction = document.getElementById("heading").innerHTML;
+     function addTextbox(message, messageType, direction){
        if (message != ''){
          if (messageType == 'right'){
            document.getElementById("chatWindow" + direction).innerHTML +=
@@ -167,11 +167,12 @@
        }
 
      }
-     let direction = document.getElementById("heading").value;
+
      pubnubDemo.addListener({
        message: function(message){
          message1 = message.message.text;
-         addTextbox(message1, 'left')
+         let direction = message.channel;
+         addTextbox(message1, 'left', direction)
        }
      })
      pubnubDemo.subscribe({
