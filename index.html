@@ -24,6 +24,9 @@
         bottom: 10vh;
         top: 5vh;
       }
+      .message{
+        margin: 3%;
+      }
       .messagebox{
         position: fixed;
         left: 0;
@@ -145,7 +148,7 @@
      function addTextbox(message, direction){
        if (message != ''){
          document.getElementById("chatWindow" + direction).innerHTML +=
-         `<div class="row">
+         `<div class="row message">
          <textarea class="col-12 textarea" rows="3">` + message + `</textarea>
          </div>`
 
