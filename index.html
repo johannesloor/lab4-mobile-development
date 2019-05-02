@@ -127,10 +127,9 @@
      function publishMessage() {
        var mess = document.getElementById("message").value;
        var direction = document.getElementById("heading").innerHTML;
-       alert(direction);
-       addTextbox(mess, 'right', direction);
+       //addTextbox(mess, 'right', direction);
        pubnubDemo.publish({ message: {"text":mess}, channel: direction});
-       document.getElementById("message").innerHTML = '';
+       document.getElementById("message").value = '';
      }
 
      pubnubDemo.addListener({
@@ -146,6 +145,11 @@
 
      function addTextbox(message, messageType, direction){
        if (message != ''){
+         document.getElementById("chatWindow" + direction).innerHTML +=
+         `<div class="row">
+         <textarea class="col-12 textarea" rows="3">` + message + `</textarea>
+         </div>`
+         /*
          if (messageType == 'right'){
            document.getElementById("chatWindow" + direction).innerHTML +=
            `<div class="row right"><div class="col-7"></div>
@@ -158,7 +162,7 @@
            <textarea class="col-5 textarea" rows="3">` + message + `</textarea>
            <div class="col-7"></div>
            </div>`
-         }
+         }*/
        }
      }
 
