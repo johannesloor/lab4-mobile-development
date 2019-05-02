@@ -171,8 +171,8 @@
      pubnubDemo.addListener({
        message: function(message){
          message1 = message.message.text;
+         alert(message1);
          addTextbox(message1, 'left')
-         console.log(message1)
        }
      })
      pubnubDemo.subscribe({
