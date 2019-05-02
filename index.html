@@ -128,9 +128,8 @@
        var mess = document.getElementById("message").value;
        var direction = document.getElementById("heading").value;
        addTextbox(mess, 'right', direction);
-       alert(direction);
        pubnubDemo.publish({ message: {"text":mess}, channel: direction});
-       document.getElementById("message").value = '';
+       document.getElementById("message").innerHTML = '';
      }
 
      function addTextbox(message, messageType, direction){
