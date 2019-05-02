@@ -24,13 +24,13 @@
         bottom: 10vh;
         top: 5vh;
       }
-      .message{
-        margin: 3%;
-        padding: 5%;
-      }
       .messageArea{
+        margin: 3%;
+      }
+      .message{
         background-color: #0084ff;
         color: white;
+        padding: 5%;
       }
       .messagebox{
         position: fixed;
@@ -153,8 +153,8 @@
      function addTextbox(message, direction){
        if (message != ''){
          document.getElementById("chatWindow" + direction).innerHTML +=
-         `<div class="row message">
-         <div class="col-12 messageArea" rows="3">` + message + `</div>
+         `<div class="row messageArea">
+         <div class="col-12 message" rows="3">` + message + `</div>
          </div>`
 
        }
